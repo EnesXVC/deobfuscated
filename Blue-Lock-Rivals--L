@@ -1,0 +1,246 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+-- Services
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
+
+-- Player References
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local rootPart = character:WaitForChild("HumanoidRootPart")
+
+-- Remotes
+local slideRemote = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("BallService"):WaitForChild("RE"):WaitForChild("Slide")
+local shootRemote = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("BallService"):WaitForChild("RE"):WaitForChild("Shoot")
+local teamServiceRemote = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("TeamService"):WaitForChild("RE"):WaitForChild("Select")
+
+-- Game References
+local GameValues = ReplicatedStorage:WaitForChild("GameValues")
+local GoalsFolder = Workspace:WaitForChild("Goals")
+local HomeGoal = GoalsFolder:WaitForChild("Home")
+local AwayGoal = GoalsFolder:WaitForChild("Away")
+
+-- Feature Toggles
+local autoStealEnabled = false
+local autoGoalEnabled = false
+local autoTPBallEnabled = false
+local autoFarmEnabled = false
+
+-- Utility Functions
+local function waitForCharacter()
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+        player.CharacterAdded:Wait()
+        task.wait(1)
+    end
+    return player.Character, player.Character:WaitForChild("HumanoidRootPart")
+end
+
+local function hasBall()
+    local character = player.Character
+    return character and (character:FindFirstChild("Football") or character:FindFirstChild("Ball"))
+end
+
+local function isVisitor()
+    return player.Team and player.Team.Name == "Visitor"
+end
+
+local function isInGame()
+    return GameValues.State.Value == "Playing"
+end
+
+-- OPTIMIZED AUTO STEAL FUNCTION
+local function autoSteal()
+    while autoStealEnabled and task.wait(0.1) do
+        local character, root = waitForCharacter()
+        if not character or not root then continue end
+
+        local targetPlayer, closestDistance = nil, math.huge
+        
+        for _, otherPlayer in ipairs(Players:GetPlayers()) do
+            if otherPlayer == player then continue end
+            
+            local otherCharacter = otherPlayer.Character
+            if not otherCharacter or not otherCharacter:FindFirstChild("HumanoidRootPart") then 
+                continue 
+            end
+            
+            local ball = otherCharacter:FindFirstChild("Football") or otherCharacter:FindFirstChild("Ball")
+            if not ball then continue end
+            
+            local distance = (root.Position - otherCharacter.HumanoidRootPart.Position).Magnitude
+            if distance < closestDistance then
+                closestDistance = distance
+                targetPlayer = otherPlayer
+            end
+        end
+        
+        if targetPlayer and targetPlayer.Character then
+            root.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2)
+            slideRemote:FireServer(targetPlayer)
+            task.wait(0.2) -- Anti-spam delay
+        end
+    end
+end
+
+-- OPTIMIZED AUTO GOAL FUNCTION
+local function autoGoal()
+    while autoGoalEnabled and task.wait(0.2) do
+        local character, root = waitForCharacter()
+        if not character or not root then continue end
+        
+        if not player.Team or isVisitor() then continue end
+        
+        local goalPosition = player.Team.Name == "Home" and AwayGoal.Position or HomeGoal.Position
+        local football = Workspace:FindFirstChild("Football") or Workspace:FindFirstChild("Ball")
+        if not football then continue end
+        
+        if football:FindFirstChild("Char") and football.Char.Value == character then
+            local direction = (goalPosition - football.Position).Unit
+            shootRemote:FireServer(100, nil, nil, direction)
+            
+            local bv = football:FindFirstChildOfClass("BodyVelocity") or Instance.new("BodyVelocity")
+            bv.Velocity = direction * 150
+            bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+            bv.Parent = football
+            
+            task.delay(0.5, function()
+                if bv and bv.Parent then
+                    bv:Destroy()
+                end
+            end)
+        end
+    end
+end
+
+-- AUTO TP BALL FUNCTION
+local function autoTPBall()
+    while autoTPBallEnabled and task.wait(0.1) do
+        local character, root = waitForCharacter()
+        if not character or not root then continue end
+
+        local ball = Workspace:FindFirstChild("Football") or Workspace:FindFirstChild("Ball")
+        if ball then
+            root.CFrame = ball.CFrame * CFrame.new(0, 0, -3)
+        end
+    end
+end
+
+-- AUTO FARM FUNCTION
+local function autoFarm()
+    while autoFarmEnabled and task.wait(0.5) do
+        -- Join team if visitor
+        if isVisitor() then
+            for _, v in ipairs(ReplicatedStorage.Teams:GetDescendants()) do
+                if v:IsA("ObjectValue") and v.Value == nil then
+                    local args = {string.sub(v.Parent.Name, 1, #v.Parent.Name - 4), "CF"}
+                    teamServiceRemote:FireServer(unpack(args))
+                    task.wait(1)
+                    break
+                end
+            end
+        end
+
+        if not isInGame() then continue end
+
+        -- Auto steal logic
+        if not hasBall() then
+            local football = Workspace:FindFirstChild("Football") or Workspace:FindFirstChild("Ball")
+            if football then
+                rootPart.CFrame = football.CFrame * CFrame.new(0, 0, -2)
+            end
+        else
+            -- Auto goal logic
+            local goalPosition = player.Team.Name == "Home" and AwayGoal.Position or HomeGoal.Position
+            local direction = (goalPosition - rootPart.Position).Unit
+            shootRemote:FireServer(100, nil, nil, direction)
+        end
+    end
+end
+
+-- UI CREATION
+local Window = Rayfield:CreateWindow({
+    Name = "Blue Lock Rivals",
+    LoadingTitle = "Loading...",
+    LoadingSubtitle = "Optimized Script",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "BlueLockScript",
+        FileName = "Config"
+    }
+})
+
+local MainTab = Window:CreateTab("Main Features", 4483362458)
+
+-- AUTO STEAL TOGGLE
+MainTab:CreateToggle({
+    Name = "Auto Steal",
+    CurrentValue = false,
+    Flag = "AutoStealToggle",
+    Callback = function(Value)
+        autoStealEnabled = Value
+        if Value then
+            task.spawn(autoSteal)
+            Rayfield:Notify({
+                Title = "Auto Steal Enabled",
+                Content = "Ball stealing activated!",
+                Duration = 3
+            })
+        end
+    end,
+})
+
+-- AUTO GOAL TOGGLE
+MainTab:CreateToggle({
+    Name = "Auto Goal",
+    CurrentValue = false,
+    Flag = "AutoGoalToggle",
+    Callback = function(Value)
+        autoGoalEnabled = Value
+        if Value then
+            task.spawn(autoGoal)
+            Rayfield:Notify({
+                Title = "Auto Goal Enabled",
+                Content = "Automatic scoring activated!",
+                Duration = 3
+            })
+        end
+    end,
+})
+
+-- AUTO TP BALL TOGGLE
+MainTab:CreateToggle({
+    Name = "Auto TP Ball",
+    CurrentValue = false,
+    Flag = "AutoTPBallToggle",
+    Callback = function(Value)
+        autoTPBallEnabled = Value
+        if Value then
+            task.spawn(autoTPBall)
+            Rayfield:Notify({
+                Title = "Ball TP Enabled",
+                Content = "Teleport to ball activated!",
+                Duration = 3
+            })
+        end
+    end,
+})
+
+-- AUTO FARM TOGGLE
+MainTab:CreateToggle({
+    Name = "Auto Farm (OP)",
+    CurrentValue = false,
+    Flag = "AutoFarmToggle",
+    Callback = function(Value)
+        autoFarmEnabled = Value
+        if Value then
+            task.spawn(autoFarm)
+            Rayfield:Notify({
+                Title = "Auto Farm Enabled",
+                Content = "Farming mode activated!",
+                Duration = 3
+            })
+        end
+    end,
+})
