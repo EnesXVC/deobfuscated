@@ -1,4 +1,3 @@
-local gamePlaceId = deobf
 local isActive = true
 local playerList = {}
 local currentPlayer = game.Players.LocalPlayer
