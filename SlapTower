@@ -1,0 +1,112 @@
+local gamePlaceId = deobf
+local isActive = true
+local playerList = {}
+local currentPlayer = game.Players.LocalPlayer
+
+if game.PlaceId ~= gamePlaceId then
+    local counter = 0
+    while true do
+        if counter == 442 - (416 + 26) then
+            game.Players.LocalPlayer:Kick("This script is locked to a specific game.")
+            return
+        end
+    end
+end
+
+local screenGui = Instance.new("ScreenGui", game.CoreGui)
+screenGui.Name = "AuraUI"
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 220, 0, 130)
+mainFrame.Position = UDim2.new(0.4, 0, 0.4, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 50, 30)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Parent = screenGui
+
+local cornerRadius = Instance.new("UICorner")
+cornerRadius.CornerRadius = UDim.new(0, 10)
+cornerRadius.Parent = mainFrame
+
+local titleLabel = Instance.new("TextLabel", mainFrame)
+titleLabel.Size = UDim2.new(0, 160, 0, 30)
+titleLabel.Position = UDim2.new(0, 35, 0, 0)
+titleLabel.Text = "Kill Aura"
+titleLabel.BackgroundTransparency = 1
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 16
+titleLabel.TextColor3 = Color3.new(1, 1, 1)
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local closeButton = Instance.new("TextButton", mainFrame)
+closeButton.Size = UDim2.new(0, 50, 0, 30)
+closeButton.Position = UDim2.new(1, -60, 0, 0)
+closeButton.Text = "X"
+closeButton.BackgroundColor3 = Color3.fromRGB(180, 80, 100)
+closeButton.TextColor3 = Color3.new(1, 0, 1)
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 14
+Instance.new("UICorner", closeButton).CornerRadius = UDim.new(0, 5)
+
+local toggleButton = Instance.new("TextButton", mainFrame)
+toggleButton.Size = UDim2.new(0, 200, 0, 50)
+toggleButton.Position = UDim2.new(0, 10, 0, 220)
+toggleButton.Text = "Kill Aura: OFF"
+toggleButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+toggleButton.TextColor3 = Color3.new(1, 1, 1)
+toggleButton.Font = Enum.Font.GothamSemibold
+toggleButton.TextSize = 14
+Instance.new("UICorner", toggleButton).CornerRadius = UDim.new(0, 10)
+
+closeButton.MouseButton1Click:Connect(function()
+    isActive = false
+    screenGui:Destroy()
+end)
+
+local killAuraEnabled = false
+toggleButton.MouseButton1Click:Connect(function()
+    killAuraEnabled = not killAuraEnabled
+    toggleButton.Text = "Kill Aura: " .. (killAuraEnabled and "ON" or "OFF")
+    toggleButton.BackgroundColor3 = (killAuraEnabled and Color3.fromRGB(100, 180, 220)) or Color3.fromRGB(60, 60, 60)
+    
+    if killAuraEnabled and currentPlayer.Backpack:FindFirstChild("Slap") then
+        currentPlayer.Backpack.Slap.Parent = currentPlayer.Character
+    end
+end)
+
+local slapTool
+repeat
+    slapTool = currentPlayer.Backpack:FindFirstChild("Slap") or (currentPlayer.Character and currentPlayer.Character:FindFirstChild("Slap"))
+    task.wait()
+until slapTool
+
+task.spawn(function()
+    while isActive do
+        task.wait(0.1)
+        slapTool = currentPlayer.Character:FindFirstChild("Slap") or currentPlayer.Backpack:FindFirstChild("Slap")
+        if killAuraEnabled and slapTool then
+            if slapTool.Parent == currentPlayer.Backpack then
+                slapTool.Parent = currentPlayer.Character
+            end
+            if slapTool:FindFirstChild("Speed") then
+                slapTool.Speed.Value = 0.1
+            end
+            if slapTool:FindFirstChild("Power") then
+                slapTool.Power.Value = 1000
+            end
+            for _, otherPlayer in ipairs(game.Players:GetPlayers()) do
+                if otherPlayer ~= currentPlayer and otherPlayer.Character then
+                    local attackData = {
+                        ["slash"] = "slash",
+                        ["target"] = otherPlayer.Character,
+                        ["position"] = Vector3.new(3.869, 1180, 3.167)
+                    }
+                    if slapTool:FindFirstChild("Event") then
+                        slapTool.Event:FireServer(unpack(attackData))
+                    end
+                end
+            end
+        end
+    end
+end)
