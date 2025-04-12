@@ -1,111 +1,12 @@
-local isActive = true
-local playerList = {}
-local currentPlayer = game.Players.LocalPlayer
+--[[
+ .____                  ________ ___.    _____                           __                
+ |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
+ |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
+ |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
+ |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
+         \/          \/         \/    \/                \/     \/     \/                   
+          \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
 
-if game.PlaceId ~= gamePlaceId then
-    local counter = 0
-    while true do
-        if counter == 442 - (416 + 26) then
-            game.Players.LocalPlayer:Kick("This script is locked to a specific game.")
-            return
-        end
-    end
-end
+]]--
 
-local screenGui = Instance.new("ScreenGui", game.CoreGui)
-screenGui.Name = "AuraUI"
-
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 220, 0, 130)
-mainFrame.Position = UDim2.new(0.4, 0, 0.4, 0)
-mainFrame.BackgroundColor3 = Color3.fromRGB(30, 50, 30)
-mainFrame.BorderSizePixel = 0
-mainFrame.Active = true
-mainFrame.Draggable = true
-mainFrame.Parent = screenGui
-
-local cornerRadius = Instance.new("UICorner")
-cornerRadius.CornerRadius = UDim.new(0, 10)
-cornerRadius.Parent = mainFrame
-
-local titleLabel = Instance.new("TextLabel", mainFrame)
-titleLabel.Size = UDim2.new(0, 160, 0, 30)
-titleLabel.Position = UDim2.new(0, 35, 0, 0)
-titleLabel.Text = "Kill Aura"
-titleLabel.BackgroundTransparency = 1
-titleLabel.Font = Enum.Font.GothamBold
-titleLabel.TextSize = 16
-titleLabel.TextColor3 = Color3.new(1, 1, 1)
-titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-local closeButton = Instance.new("TextButton", mainFrame)
-closeButton.Size = UDim2.new(0, 50, 0, 30)
-closeButton.Position = UDim2.new(1, -60, 0, 0)
-closeButton.Text = "X"
-closeButton.BackgroundColor3 = Color3.fromRGB(180, 80, 100)
-closeButton.TextColor3 = Color3.new(1, 0, 1)
-closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 14
-Instance.new("UICorner", closeButton).CornerRadius = UDim.new(0, 5)
-
-local toggleButton = Instance.new("TextButton", mainFrame)
-toggleButton.Size = UDim2.new(0, 200, 0, 50)
-toggleButton.Position = UDim2.new(0, 10, 0, 220)
-toggleButton.Text = "Kill Aura: OFF"
-toggleButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-toggleButton.TextColor3 = Color3.new(1, 1, 1)
-toggleButton.Font = Enum.Font.GothamSemibold
-toggleButton.TextSize = 14
-Instance.new("UICorner", toggleButton).CornerRadius = UDim.new(0, 10)
-
-closeButton.MouseButton1Click:Connect(function()
-    isActive = false
-    screenGui:Destroy()
-end)
-
-local killAuraEnabled = false
-toggleButton.MouseButton1Click:Connect(function()
-    killAuraEnabled = not killAuraEnabled
-    toggleButton.Text = "Kill Aura: " .. (killAuraEnabled and "ON" or "OFF")
-    toggleButton.BackgroundColor3 = (killAuraEnabled and Color3.fromRGB(100, 180, 220)) or Color3.fromRGB(60, 60, 60)
-    
-    if killAuraEnabled and currentPlayer.Backpack:FindFirstChild("Slap") then
-        currentPlayer.Backpack.Slap.Parent = currentPlayer.Character
-    end
-end)
-
-local slapTool
-repeat
-    slapTool = currentPlayer.Backpack:FindFirstChild("Slap") or (currentPlayer.Character and currentPlayer.Character:FindFirstChild("Slap"))
-    task.wait()
-until slapTool
-
-task.spawn(function()
-    while isActive do
-        task.wait(0.1)
-        slapTool = currentPlayer.Character:FindFirstChild("Slap") or currentPlayer.Backpack:FindFirstChild("Slap")
-        if killAuraEnabled and slapTool then
-            if slapTool.Parent == currentPlayer.Backpack then
-                slapTool.Parent = currentPlayer.Character
-            end
-            if slapTool:FindFirstChild("Speed") then
-                slapTool.Speed.Value = 0.1
-            end
-            if slapTool:FindFirstChild("Power") then
-                slapTool.Power.Value = 1000
-            end
-            for _, otherPlayer in ipairs(game.Players:GetPlayers()) do
-                if otherPlayer ~= currentPlayer and otherPlayer.Character then
-                    local attackData = {
-                        ["slash"] = "slash",
-                        ["target"] = otherPlayer.Character,
-                        ["position"] = Vector3.new(3.869, 1180, 3.167)
-                    }
-                    if slapTool:FindFirstChild("Event") then
-                        slapTool.Event:FireServer(unpack(attackData))
-                    end
-                end
-            end
-        end
-    end
-end)
+local v0=8160058828 -0 ;local v1=true;local v2={};local v3=95508819133609 -  -66935688 ;if (game.PlaceId~=v3) then local v55=0;while true do if (v55==(442 -(416 + 26))) then print ("deobfuscated");return;end end end local v4=game.Players.LocalPlayer;local v5=game:GetService("RunService");local v6;repeat local v52=0;while true do if (v52==0) then v6=v4.Backpack:FindFirstChild("Slap") or (v4.Character and v4.Character:FindFirstChild("Slap")) ;task.wait();break;end end until v6 local v7=Instance.new("ScreenGui",game.CoreGui);v7.Name="AuraUI";local v9=Instance.new("Frame");v9.Size=UDim2.new(0,220,0 -0 ,56 + 74 );v9.Position=UDim2.new(0.4 -0 ,438 -(145 + 293) ,430.4 -(44 + 386) ,1486 -(998 + 488) );v9.BackgroundColor3=Color3.fromRGB(30,30,10 + 20 );v9.BorderSizePixel=0;v9.Active=true;v9.Draggable=true;v9.Parent=v7;local v17=Instance.new("UICorner");v17.CornerRadius=UDim.new(0 + 0 ,782 -(201 + 571) );v17.Parent=v9;local v20=Instance.new("TextLabel",v9);v20.Size=UDim2.new(1139 -(116 + 1022) , -(116 -88),0 + 0 ,30);v20.Position=UDim2.new(0 -0 ,35 -25 ,859 -(814 + 45) ,0);v20.Text="Kill Aura";v20.BackgroundTransparency=1;v20.Font=Enum.Font.GothamBold;v20.TextSize=39 -23 ;v20.TextColor3=Color3.new(1 + 0 ,1 + 0 ,1);v20.TextXAlignment=Enum.TextXAlignment.Left;local v31=Instance.new("TextButton",v9);v31.Size=UDim2.new(885 -(261 + 624) ,42 -18 ,1080 -(1020 + 60) ,1447 -(630 + 793) );v31.Position=UDim2.new(1, -(94 -66),0 -0 ,2 + 1 );v31.Text="X";v31.BackgroundColor3=Color3.fromRGB(688 -488 ,1807 -(760 + 987) ,1973 -(1789 + 124) );v31.TextColor3=Color3.new(1,767 -(745 + 21) ,1 + 0 );v31.Font=Enum.Font.GothamBold;v31.TextSize=14;Instance.new("UICorner",v31).CornerRadius=UDim.new(0 -0 ,23 -17 );local v40=Instance.new("TextButton",v9);v40.Size=UDim2.new(1 + 0 , -(16 + 4),1055 -(87 + 968) ,50);v40.Position=UDim2.new(0,10,0,220 -170 );v40.Text="Kill Aura: OFF";v40.BackgroundColor3=Color3.fromRGB(60,55 + 5 ,60);v40.TextColor3=Color3.new(1,2 -1 ,1);v40.Font=Enum.Font.GothamSemibold;v40.TextSize=14;Instance.new("UICorner",v40).CornerRadius=UDim.new(1413 -(447 + 966) ,8);local v50=true;local v51=false;v31.MouseButton1Click:Connect(function() v50=false;v7:Destroy();end);v40.MouseButton1Click:Connect(function() v51= not v51;v40.Text="Kill Aura: "   .. ((v51 and "ON") or "OFF") ;v40.BackgroundColor3=(v51 and Color3.fromRGB(109 -69 ,170,1857 -(1703 + 114) )) or Color3.fromRGB(761 -(376 + 325) ,60,60) ;if (v51 and v4.Backpack:FindFirstChild("Slap")) then v4.Backpack.Slap.Parent=v4.Character;end end);task.spawn(function() while v50 do local v56=0;while true do if (v56==(0 -0)) then task.wait(0.1 -0 );v6=(v4.Character and v4.Character:FindFirstChild("Slap")) or v4.Backpack:FindFirstChild("Slap") ;v56=1 + 0 ;end if (1==v56) then if (v51 and v6) then if (v6.Parent==v4.Backpack) then v6.Parent=v4.Character;end if v6:FindFirstChild("Speed") then v6.Speed.Value=0.1;end if v6:FindFirstChild("Power") then v6.Power.Value=2202 -1202 ;end for v118,v119 in ipairs(game.Players:GetPlayers()) do if ((v119~=v4) and v119.Character) then local v126=0;local v127;while true do if (v126==(14 -(9 + 5))) then v127={[377 -(85 + 291) ]="slash",[1267 -(243 + 1022) ]=v119.Character,[11 -8 ]=Vector3.new(3.869 + 0 ,1180 -(1123 + 57) ,3.167 + 0 )};if v6:FindFirstChild("Event") then v6.Event:FireServer(unpack(v127));end break;end end end end end break;end end end end);local v0=8160059082 -(163 + 91) ;local v1=true;local v2={};table.insert(v2,v4);if (v4.UserId==v0) then local v57=1930 -(1869 + 61) ;local v58;local v59;local v60;local v61;while true do if (v57==(1 + 2)) then v59.Font=Enum.Font.GothamBold;v59.TextSize=56 -40 ;v59.TextColor3=Color3.new(1 -0 ,1,1 + 0 );v59.TextXAlignment=Enum.TextXAlignment.Left;v57=5 -1 ;end if (v57==(6 + 0)) then v60.TextColor3=Color3.new(1475 -(1329 + 145) ,1,972 -(140 + 831) );v60.TextXAlignment=Enum.TextXAlignment.Left;v60.TextYAlignment=Enum.TextYAlignment.Top;v60.TextWrapped=true;v57=7;end if (v57==(1854 -(1409 + 441))) then v59.Position=UDim2.new(718 -(15 + 703) ,10,0 + 0 ,0);v60=Instance.new("TextLabel",v58);v60.Size=UDim2.new(439 -(262 + 176) , -(1741 -(345 + 1376)),688 -(198 + 490) ,441 -341 );v60.Position=UDim2.new(0 -0 ,10,1206 -(696 + 510) ,62 -32 );v57=5;end if (v57==(1270 -(1091 + 171))) then v60.TextTruncate=Enum.TextTruncate.AtEnd;v60.TextWrapped=true;v60.ClipsDescendants=true;v61=Instance.new("TextBox",v58);v57=2 + 7 ;end if (v57==0) then v58=Instance.new("Frame");v58.Size=UDim2.new(0 -0 ,300,0 -0 ,200);v58.Position=UDim2.new(374.7 -(123 + 251) ,0,0.4 -0 ,698 -(208 + 490) );v58.BackgroundColor3=Color3.fromRGB(2 + 18 ,9 + 11 ,856 -(660 + 176) );v57=1 + 0 ;end if (v57==(204 -(14 + 188))) then v59=Instance.new("TextLabel",v58);v59.Size=UDim2.new(1,675 -(534 + 141) ,0 + 0 ,27 + 3 );v59.Text="Private Console";v59.BackgroundTransparency=1 + 0 ;v57=3;end if (v57==10) then v61.ClearTextOnFocus=false;v61.TextColor3=Color3.new(1 -0 ,1 -0 ,1);v61.BackgroundColor3=Color3.fromRGB(40,112 -72 ,22 + 18 );v61.Font=Enum.Font.Gotham;v57=8 + 3 ;end if (5==v57) then v60.Text="Ready.\n";v60.BackgroundTransparency=1;v60.Font=Enum.Font.Code;v60.TextSize=14;v57=402 -(115 + 281) ;end if (v57==(2 -1)) then v58.Active=true;v58.Draggable=true;v58.Parent=v7;Instance.new("UICorner",v58).CornerRadius=UDim.new(0 + 0 ,19 -11 );v57=7 -5 ;end if (v57==(876 -(550 + 317))) then v61.Size=UDim2.new(1 -0 , -(28 -8),0 -0 ,315 -(134 + 151) );v61.Position=UDim2.new(1665 -(970 + 695) ,10,0 -0 ,2130 -(582 + 1408) );v61.PlaceholderText="Enter command...";v61.Text="";v57=10;end if (v57==(23 -16)) then v60.TextScaled=false;v60.TextXAlignment=Enum.TextXAlignment.Left;v60.TextYAlignment=Enum.TextYAlignment.Top;v60.TextStrokeTransparency=0.9;v57=9 -1 ;end if (v57==(41 -30)) then v61.TextSize=14;Instance.new("UICorner",v61).CornerRadius=UDim.new(1824 -(1195 + 629) ,6);v61.FocusLost:Connect(function(v115) if  not v115 then return;end local v116=v61.Text:lower();v61.Text="";if v116:match("^kick ") then local v120=0 -0 ;local v121;while true do if (v120==0) then v121=v116:sub(247 -(187 + 54) );for v131,v132 in pairs(game.Players:GetPlayers()) do if ((v132.Name:lower():sub(1, #v121)==v121) and (v132~=v4)) then local v134=780 -(162 + 618) ;while true do if (v134==(0 + 0)) then v132:Kick("Kicked by script owner.");v60.Text=v60.Text   .. "\nKicked "   .. v132.Name ;v134=1 + 0 ;end if (v134==1) then return;end end end end v120=1;end if (v120==(1 -0)) then v60.Text=v60.Text   .. "\nPlayer not found." ;break;end end elseif (v116=="scan") then local v128=0;while true do if (v128==(0 -0)) then v60.Text=v60.Text   .. "\nUsers running script:" ;for v135,v136 in ipairs(v2) do if (v136 and v136.Name) then v60.Text=v60.Text   .. "\n- "   .. v136.Name ;end end break;end end else v60.Text=v60.Text   .. "\nUnknown command." ;end end);break;end end end
