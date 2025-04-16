@@ -18,34 +18,62 @@ local function v7(v66, v67)
     end
     return v5(v68)
 end
-local v8 = loadstring(game:HttpGet('https://pastebin.com/raw/Ne470NUV'))();
+local v8 = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))();
 
-local v9 = v8:MakeWindow({
-    Name = 'Rivals Roblox GUI',
-    HidePremium = false,
-    SaveConfig = true,
-    ConfigFolder = 'OrionTest'
+local v9 = v8:CreateWindow({
+	Name = "Rivals", -- This Is Title Of Your Window
+	Subtitle = nil, -- A Gray Subtitle next To the main title.
+	LogoID = "82795327169782", -- The Asset ID of your logo. Set to nil if you do not have a logo for Luna to use.
+	LoadingEnabled = true, -- Whether to enable the loading animation. Set to false if you do not want the loading screen or have your own custom one.
+	LoadingTitle = "open src", -- Header for loading screen
+	LoadingSubtitle = "by enesxvc", -- Subtitle for loading screen
+
+	ConfigSettings = {
+		RootFolder = nil, -- The Root Folder Is Only If You Have A Hub With Multiple Game Scripts and u may remove it. DO NOT ADD A SLASH
+		ConfigFolder = "Big Hub" -- The Name Of The Folder Where Luna Will Store Configs For This Script. DO NOT ADD A SLASH
+	},
+
+	KeySystem = false, -- As Of Beta 6, Luna Has officially Implemented A Key System!
+	KeySettings = {
+		Title = "Luna Example Key",
+		Subtitle = "Key System",
+		Note = "Best Key System Ever! Also, Please Use A HWID Keysystem like Pelican, Luarmor etc. that provide key strings based on your HWID since putting a simple string is very easy to bypass",
+		SaveInRoot = false, -- Enabling will save the key in your RootFolder (YOU MUST HAVE ONE BEFORE ENABLING THIS OPTION)
+		SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+		Key = {"IlÄ±ke25ms&33ms"}, -- List of keys that will be accepted by the system, please use a system like Pelican or Luarmor that provide key strings based on your HWID since putting a simple string is very easy to bypass
+		SecondAction = {
+			Enabled = true, -- Set to false if you do not want a second action,
+			Type = "Link", -- Link / Discord.
+			Parameter = "" -- If Type is Discord, then put your invite link (DO NOT PUT DISCORD.GG/). Else, put the full link of your key system here.
+		}
+	}
+})
+
+local v10 = v9:CreateTab({
+	Name = "Main",
+	Icon = "view_in_ar",
+	ImageSource = "Material",
+	ShowTitle = true -- This will determine whether the big header text in the tab will show
 });
-local v10 = v9:MakeTab({
-    Name = 'Main',
-    Icon = 'rbxassetid://4483345998',
-    PremiumOnly = false
+local v11 = v9:CreateTab({
+	Name = "Visuals",
+	Icon = "view_in_ar",
+	ImageSource = "Material",
+	ShowTitle = true -- This will determine whether the big header text in the tab will show
 });
-local v11 = v9:MakeTab({
-    Name = 'Visuals',
-    Icon = 'rbxassetid://4483345998',
-    PremiumOnly = false
+local v12 = v9:CreateTab({
+	Name = "Player",
+	Icon = "view_in_ar",
+	ImageSource = "Material",
+	ShowTitle = true -- This will determine whether the big header text in the tab will show
 });
-local v12 = v9:MakeTab({
-    Name = 'Player',
-    Icon = 'rbxassetid://4483345998',
-    PremiumOnly = false
-});
-local v13 = v9:MakeTab({
-    Name = 'Credits',
-    Icon = 'rbxassetid://4483345998',
-    PremiumOnly = false
-});
+local v13 = v9:CreateTab({
+	Name = "Credits",
+	Icon = "view_in_ar",
+	ImageSource = "Material",
+	ShowTitle = true -- This will determine whether the big header text in the tab will show
+})
+
 getgenv().AimbotEnabled = false;
 getgenv().ESPEnabled = false;
 getgenv().InfiniteJumpEnabled = false;
@@ -353,67 +381,76 @@ end);
 v26.Button1Up:Connect(function()
     v43 = false;
 end);
-local v44 = v10:AddSection({
-    Name = "Aim Method (Can't Use Both)"
-});
-v10:AddToggle({
-    Name = 'Enable Aimbot',
-    Default = false,
-    Callback = function(v88)
-        getgenv().AimbotEnabled = v88;
-    end
-});
-local v44 = v11:AddSection({
-    Name = 'Types of ESP'
-});
-v11:AddToggle({
-    Name = 'Enable ESP',
-    Default = false,
-    Callback = function(v90)
-        getgenv().ESPEnabled = v90;
-    end
-});
-v10:AddToggle({
-    Name = 'Enable Silent Aim (Need to spam click)',
-    Default = false,
-    Callback = function(v92)
-        getgenv().SilentAimEnabled = v92;
-    end
-});
-v10:AddSlider({
-    Name = 'Aimbot Strength',
-    Min = 0.40000000000009095,
-    Max = 1,
-    Default = 0.6,
-    Increment = 1E-2,
-    Callback = function(v94)
-        getgenv().Smoothness = v94;
-    end
-});
-local v44 = v10:AddSection({
-    Name = 'Blatant'
-});
-v10:AddToggle({
-    Name = 'Teleport to Enemy',
-    Default = false,
-    Callback = function(v96)
-        getgenv().AutoFarmEnabled = v96;
-    end
-});
-v13:AddLabel('Made by Skyee');
-v13:AddLabel('Youtube.com/Skyee6754');
-v13:AddLabel('Deobfuscated By IEnes');
-v13:AddLabel('its script made by Skyee6754');
-local v44 = v12:AddSection({
-    Name = 'Local Player'
-});
-v12:AddToggle({
-    Name = 'Walkspeed',
-    Default = false,
-    Callback = function(v98)
-        getgenv().CFrameWalkEnabled = v98;
-    end
-});
+
+local v44 = v10:CreateSection("Aim Method (Can't Use Both)");
+
+v10:CreateToggle({
+	Name = "Enable Aimbot",
+	Description = nil,
+	CurrentValue = false,
+    	Callback = function(v88)
+            getgenv().AimbotEnabled = v88;
+    	end
+}, "AimbotToggle");
+
+local v44 = v11:CreateSection("Types of ESP");
+
+v11:CreateToggle({
+	Name = "Enable ESP",
+	Description = nil,
+	CurrentValue = false,
+    	Callback = function(v90)
+            getgenv().ESPEnabled = v90;
+    	end
+}, "ESPToggle");
+
+v10:CreateToggle({
+	Name = "Enable SilentAim",
+	Description = nil,
+	CurrentValue = false,
+    	Callback = function(v92)
+            getgenv().SilentAimEnabled = v92;
+    	end
+}, "SilentAimToggle");
+
+v10:CreateSlider({
+	Name = "Aimbot Strength",
+	Range = {0.40000000000009095, 1},
+	Increment = 1E-2,
+	CurrentValue = 0.6,
+    	Callback = function(v94)
+            getgenv().Smoothness = v94;
+    	end
+}, "AimbotStrengthSlider");
+
+
+local v44 = v10:CreateSection("Blatant(DOWN)");
+
+v10:CreateToggle({
+	Name = "Teleport to Enemy",
+	Description = nil,
+	CurrentValue = false,
+    	Callback = function(v96)
+            getgenv().AutoFarmEnabled = v96;
+    	end
+}, "BlatantToggle");
+
+v13:CreateLabel({
+	Text = "u",
+	Style = 2
+})
+
+local v44 = v12:CreateSection("Local Player");
+
+v12:CreateToggle({
+	Name = "WalkSpeed",
+	Description = nil,
+	CurrentValue = false,
+    	Callback = function(v98)
+            getgenv().CFrameWalkEnabled = v98;
+    	end
+}, "WalkspeedToggle")
+
 local v45;
 local function v46(v100)
     if (not v100 or not v100.Character or not v100.Character:FindFirstChild('Head')) then
@@ -671,32 +708,33 @@ for v151, v152 in ipairs(v48:GetPlayers()) do
         v56(v152);
     end
 end
-v11:AddToggle({
-    Name = 'Enable Health ESP',
-    Default = false,
-    Callback = function(v153)
-        local v154 = 0;
-        while true do
-            if (v154 == (0)) then
-                getgenv().HealthESPEnabled = v153;
-                if v153 then
-                    for v241, v242 in pairs(v48:GetPlayers()) do
-                        if v242.Character then
-                            v55(v242.Character);
+v11:CreateToggle({
+	Name = "Enable Health ESP",
+	Description = nil,
+	CurrentValue = false,
+    	Callback = function(v153)
+            local v154 = 0;
+            while true do
+                if (v154 == (0)) then
+                    getgenv().HealthESPEnabled = v153;
+                    if v153 then
+                        for v241, v242 in pairs(v48:GetPlayers()) do
+                            if v242.Character then
+                                v55(v242.Character);
+                            end
+                        end
+                    else
+                        for v243, v244 in pairs(v48:GetPlayers()) do
+                            if (v244.Character and v244.Character:FindFirstChild('Head') and v244.Character.Head:FindFirstChild('HealthBar')) then
+                                v244.Character.Head.HealthBar:Destroy();
+                            end
                         end
                     end
-                else
-                    for v243, v244 in pairs(v48:GetPlayers()) do
-                        if (v244.Character and v244.Character:FindFirstChild('Head') and v244.Character.Head:FindFirstChild('HealthBar')) then
-                            v244.Character.Head.HealthBar:Destroy();
-                        end
-                    end
+                    break
                 end
-                break
             end
-        end
-    end
-});
+    	end
+}, "ESPHealtToggle");
 local v48 = game:GetService('Players');
 local v57 = game:GetService('UserInputService');
 local v50 = game:GetService('RunService');
@@ -786,63 +824,64 @@ if v58.Character then
     v58.Character:WaitForChild('HumanoidRootPart');
     v65(v58.Character);
 end
-v12:AddBind({
-    Name = 'Toggle Fly',
-    Default = Enum.KeyCode.X,
+v12:CreateInput({
+	Name = "Toggle Fly",
+	Description = nil,
+	PlaceholderText = "keybind",
+	CurrentValue = "X",
     Hold = false,
-    Callback = function()
-        v59 = not v59;
-        if (v59 and v58.Character) then
-            local v193 = 0;
-            while true do
-                if (0 == v193) then
-                    v63(v58.Character);
-                    v61.Parent = v58.Character:FindFirstChild('HumanoidRootPart');
-                    break
+	Numeric = false, 
+	MaxCharacters = nil, 
+	Enter = false,
+    	Callback = function()
+            v59 = not v59;
+            if (v59 and v58.Character) then
+                local v193 = 0;
+                while true do
+                    if (0 == v193) then
+                        v63(v58.Character);
+                        v61.Parent = v58.Character:FindFirstChild('HumanoidRootPart');
+                        break
+                    end
                 end
+            else
+                v64();
             end
-        else
-            v64();
-        end
-    end
-});
-v12:AddSlider({
-    Name = 'Fly Speed',
-    Min = 30,
-    Max = 100,
-    Default = 50,
-    Increment = 1,
-    ValueName = 'Speed',
-    Callback = function(v161)
-        v60 = v161;
-    end
-});
-v12:AddSlider({
-    Name = 'Walkspeed Value',
-    Min = 0.2,
-    Max = 1.5,
-    Default = 0.2,
-    Increment = 0.1,
-    ValueName = 'Speed',
-    Callback = function(v162)
-        getgenv().CFrameWalkSpeed = v162;
-    end
-});
-local v44 = v12:AddSection({
-    Name = 'Misc'
-});
-v12:AddToggle({
-    Name = 'Infinite Jump',
-    Default = false,
-    Callback = function(v164)
-        getgenv().InfiniteJumpEnabled = v164;
-    end
-});
-v12:AddToggle({
-    Name = 'No Clip',
-    Default = false,
-    Callback = function(v166)
-        getgenv().NoClipEnabled = v166;
-    end
-});
-v8:Init();
+    	end
+}, "ToggleFlyInput");
+v12:CreateSlider({
+	Name = "Fly Speed",
+	Range = {30, 100},
+	Increment = 1,
+	CurrentValue = 50,
+    	Callback = function(v161)
+            v60 = v161;
+    	end
+}, "FLYSlider");
+v12:CreateSlider({
+	Name = "Walkspeed Value",
+	Range = {0.2, 1.5},
+	Increment = 0.1,
+	CurrentValue = 0.2,
+    	Callback = function(v162)
+            getgenv().CFrameWalkSpeed = v162;
+    	end
+}, "WSSlider");
+local v44 = v12:CreateSection("misc")
+v12:CreateToggle({
+	Name = "Infinite Jump",
+	Description = nil,
+	CurrentValue = false,
+    	Callback = function(v164)
+            getgenv().InfiniteJumpEnabled = v164;
+    	end
+}, "Ä±nfjumpToggle");
+
+v12:CreateToggle({
+	Name = "Noclip",
+	Description = nil,
+	CurrentValue = false,
+    	Callback = function(v166)
+            getgenv().NoClipEnabled = v166;
+    	end
+}, "noclipToggle");
