@@ -18,7 +18,7 @@ local function v7(v66, v67)
     end
     return v5(v68)
 end
-local v8 = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))();
+local v8 = loadstring(game:HttpGet("https://pastebin.com/raw/Y8wBJLVt", true))();
 
 local v9 = v8:CreateWindow({
 	Name = "Rivals", -- This Is Title Of Your Window
