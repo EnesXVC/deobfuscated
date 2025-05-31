@@ -1,3 +1,4 @@
+-- ts file was generated at discord.gg/rTw5M8dRXN
 local NotificationScript, isSupported = pcall(function()
 local CoreGui = game:GetService("StarterGui")
 
