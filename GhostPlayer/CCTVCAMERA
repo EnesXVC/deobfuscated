@@ -1,3 +1,4 @@
+-- ts file was generated at discord.gg/rTw5M8dRXN
 local CoreGui = game:GetService("StarterGui")
 
 CoreGui:SetCore("SendNotification", {
