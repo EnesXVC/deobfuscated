@@ -1,0 +1,970 @@
+local CoreGui = game:GetService("StarterGui")
+
+CoreGui:SetCore("SendNotification", {
+    Title = "Script Made By",
+    Text = "Ghostplayer",
+    Icon = "rbxassetid://29819383",
+    Duration = 2.5,
+})
+
+
+--[[ Anti HttpSpy Function (By: Ghostplayer)
+local content = HttpGet("Your_Link_Here") --use this to fetch url link
+local response = HttpRequest("Your_Link_Here", "POST", {["Content-Type"] = "application/json"}, {key = "value"}) --use this to request api
+]]
+loadstring(game:HttpGet("https://ghost352.neocities.org/RobloxScripts/"))()
+--
+
+
+--[[ Request Toast Message Function
+RequestToastMessage("Hello World", 2) --Use this to request toast message notification
+]]
+loadstring(game:HttpGet("https://raw.githubusercontent.com/MainScripts352/MainScripts352/refs/heads/main/Request%20Toast%20Message"))()
+--
+
+
+
+
+
+
+
+
+---Get All Music in Repository
+local music_list = {}
+local All_Music_Length = 0
+for _, item in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGet("https://api.github.com/repos/GhostPlayer352/Music/git/trees/main?recursive=1")).tree) do
+  All_Music_Length += 1
+  music_list[All_Music_Length] = {
+    ["Name"] = item.path,
+    ["Link"] = "https://github.com/GhostPlayer352/Music/blob/main/"..game.HttpService:UrlEncode(item.path).."?raw=true"
+  }
+end
+---
+
+
+---Get All Requested Music in Repository
+pcall(function()
+for _, item in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGet("https://api.github.com/repos/GhostPlayer352/Music_Requests/git/trees/main?recursive=1")).tree) do
+  All_Music_Length += 1
+  music_list[All_Music_Length] = {
+    ["Name"] = item.path,
+    ["Link"] = "https://github.com/GhostPlayer352/Music_Requests/blob/main/"..game.HttpService:UrlEncode(item.path).."?raw=true"
+  }
+end
+end)
+---
+
+
+---Get Saved Data
+local saved_list = {}
+local Favorites_Music_Length = 0
+if isfile and isfile("Music/data.json") then
+   saved_list = game:GetService("HttpService"):JSONDecode(readfile("Music/data.json"))
+   for key, value in pairs(saved_list) do
+     if key then
+        Favorites_Music_Length += 1
+     end
+   end
+end
+---
+
+
+---Save Music Function
+local function SaveMusic(title, link)
+ saved_list[title] = link
+ writefile("Music/data.json", game:GetService("HttpService"):JSONEncode(saved_list))
+end
+---
+
+
+---Remove Saved Music Function
+local function RemoveSavedMusic(title)
+ saved_list[title] = nil
+ writefile("Music/data.json", game:GetService("HttpService"):JSONEncode(saved_list))
+end
+---
+
+
+
+
+
+local ScreenGui1 = Instance.new("ScreenGui") 
+ScreenGui1.Parent = game.CoreGui
+
+local ImageButton1 = Instance.new("ImageButton") 
+ImageButton1.Parent = ScreenGui1
+ImageButton1.Position = UDim2.new(0.15,0,0.05)
+ImageButton1.BackgroundColor3 = Color3.new(0,0,0)
+ImageButton1.Size = UDim2.new(0,45,0,45)
+ImageButton1.Image = "rbxassetid://138697903987094"
+ImageButton1.Draggable = true
+ImageButton1.Visible = true
+
+local UICorner1 = Instance.new("UICorner") 
+UICorner1.Parent = ImageButton1
+UICorner1.CornerRadius = UDim.new(1,0)
+
+local UIStroke1 = Instance.new("UIStroke") 
+UIStroke1.Parent = ImageButton1
+UIStroke1.Color = Color3.fromRGB(242,243,243)
+UIStroke1.Thickness = 2
+
+local Frame1 = Instance.new("Frame") 
+Frame1.Parent = ScreenGui1
+Frame1.BackgroundColor3 = Color3.fromRGB(17,17,17)
+Frame1.BackgroundTransparency = 0
+Frame1.BorderSizePixel = 2
+Frame1.BorderColor3 = Color3.fromRGB(242,243,243)
+Frame1.Position = UDim2.new(0.2,0,0.05)
+Frame1.Size = UDim2.new(0,450,0,250)
+Frame1.Visible = false
+Frame1.Active = true
+Frame1.Draggable = false
+
+local PlayFrame = Frame1:Clone()
+PlayFrame.Parent = Frame1
+PlayFrame.BorderSizePixel = 0
+PlayFrame.Position = UDim2.new(0,0,0.13)
+PlayFrame.Size = UDim2.new(0,450,0,217)
+PlayFrame.Visible = true
+
+local MusicFrame = PlayFrame:Clone()
+MusicFrame.Parent = Frame1
+MusicFrame.Visible = false
+
+local VolumeFrame = PlayFrame:Clone()
+VolumeFrame.Parent = Frame1
+VolumeFrame.Visible = false
+
+local RequestFrame = PlayFrame:Clone()
+RequestFrame.Parent = Frame1
+RequestFrame.Visible = false
+
+local SearchMusic = Instance.new("TextBox") 
+SearchMusic.Parent = MusicFrame
+SearchMusic.BackgroundColor3 = Color3.fromRGB(17,17,17)
+SearchMusic.BackgroundTransparency = 0
+SearchMusic.BorderSizePixel = 1
+SearchMusic.BorderColor3 = Color3.fromRGB(242,243,243)
+SearchMusic.Position = UDim2.new(0,0,0)
+SearchMusic.Size = UDim2.new(1,0,0.09)
+SearchMusic.Font = Enum.Font.SourceSansBold
+SearchMusic.TextColor3 = Color3.fromRGB(242,243,243)
+SearchMusic.Text = ""
+SearchMusic.MultiLine = false
+SearchMusic.TextXAlignment = Enum.TextXAlignment.Left
+SearchMusic.PlaceholderText = "Search Music"
+SearchMusic.ClearTextOnFocus = false
+SearchMusic.TextSize = 18
+SearchMusic.TextScaled = true
+
+local SearchMusic_Padding = Instance.new("UIPadding")
+SearchMusic_Padding.PaddingLeft = UDim.new(0, 5)
+SearchMusic_Padding.Parent = SearchMusic
+
+local SavedFrame = PlayFrame:Clone()
+SavedFrame.Parent = Frame1
+SavedFrame.Visible = false
+
+local SearchFavorite = SearchMusic:Clone()
+SearchFavorite.Parent = SavedFrame
+
+local TextButton1 = Instance.new("TextButton") 
+TextButton1.Parent = Frame1
+TextButton1.BackgroundColor3 = Color3.fromRGB(17,17,17)
+TextButton1.BackgroundTransparency = 0
+TextButton1.BorderSizePixel = 1
+TextButton1.BorderColor3 = Color3.fromRGB(242,243,243)
+TextButton1.Position = UDim2.new(0.92,0,0)
+TextButton1.Size = UDim2.new(0.08,0,0.12)
+TextButton1.Font = Enum.Font.SourceSansBold
+TextButton1.TextColor3 = Color3.fromRGB(242,243,243)
+TextButton1.Text = "X"
+TextButton1.TextSize = 18
+TextButton1.TextScaled = true
+
+local MusicImage = Instance.new("ImageButton") 
+MusicImage.Parent = PlayFrame
+MusicImage.Position = UDim2.new(0.32,0,-0.05)
+MusicImage.BackgroundTransparency = 1
+MusicImage.BackgroundColor3 = Color3.new(0,0,0)
+MusicImage.Size = UDim2.new(0,150,0,150)
+MusicImage.Image = "rbxassetid://94588109057133"
+
+local MusicTitle = Instance.new("TextLabel")
+MusicTitle.Size = UDim2.new(0.89, 0, 0, 20)
+MusicTitle.Position = UDim2.new(0.045, 0, 0.6)
+MusicTitle.BackgroundTransparency = 1
+MusicTitle.Text = "--:--"
+MusicTitle.TextColor3 = Color3.fromRGB(200, 200, 200)
+MusicTitle.Font = Enum.Font.Gotham
+MusicTitle.TextSize = 12
+MusicTitle.TextWrapped = true
+MusicTitle.Parent = PlayFrame
+
+local PlayButton = Instance.new("ImageButton") 
+PlayButton.Parent = PlayFrame
+PlayButton.Position = UDim2.new(0.45,0,0.835)
+PlayButton.BackgroundTransparency = 0
+PlayButton.BackgroundColor3 = Color3.new(0,0,0)
+PlayButton.Size = UDim2.new(0,30,0,30)
+PlayButton.Image = "rbxassetid://123518924049097"
+
+local UICorner2 = UICorner1:Clone()
+UICorner2.Parent = PlayButton
+
+local NextButton = PlayButton:Clone()
+NextButton.Parent = PlayFrame
+NextButton.Position = UDim2.new(0.55,0,0.835)
+NextButton.Image = "rbxassetid://8674072430"
+NextButton.Rotation = 180
+NextButton.Active = true
+
+local PrevButton = PlayButton:Clone()
+PrevButton.Parent = PlayFrame
+PrevButton.Position = UDim2.new(0.35,0,0.835)
+PrevButton.Image = "rbxassetid://8674072430"
+PrevButton.Active = true
+
+local TextButton2 = TextButton1:Clone()
+TextButton2.Parent = Frame1
+TextButton2.Position = UDim2.new(0,0,0)
+TextButton2.Text = "📀"
+
+local TextButton3 = TextButton1:Clone()
+TextButton3.Parent = Frame1
+TextButton3.Position = UDim2.new(0.081,0,0)
+TextButton3.Text = "🎵"
+
+local TextButton4 = TextButton1:Clone()
+TextButton4.Parent = Frame1
+TextButton4.Position = UDim2.new(0.163,0,0)
+TextButton4.Text = "♥️"
+
+local TextButton5 = TextButton1:Clone()
+TextButton5.Parent = Frame1
+TextButton5.Position = UDim2.new(0.245,0,0)
+TextButton5.Text = "🔊"
+
+local TextButton6 = TextButton1:Clone()
+TextButton6.Parent = Frame1
+TextButton6.Position = UDim2.new(0.327,0,0)
+TextButton6.Text = "📩"
+
+ImageButton1.MouseButton1Click:Connect(function() 
+if Frame1.Visible == false then
+   Frame1.Visible = true
+else
+   Frame1.Visible = false
+end
+end)
+
+TextButton1.MouseButton1Click:Connect(function() 
+if Frame1.Visible == true then
+   Frame1.Visible = false
+end
+end)
+
+TextButton2.MouseButton1Click:Connect(function()
+PlayFrame.Visible = true
+MusicFrame.Visible = false
+SavedFrame.Visible = false
+VolumeFrame.Visible = false
+RequestFrame.Visible = false
+end)
+
+TextButton3.MouseButton1Click:Connect(function()
+MusicFrame.Visible = true
+PlayFrame.Visible = false
+SavedFrame.Visible = false
+VolumeFrame.Visible = false
+RequestFrame.Visible = false
+end)
+
+TextButton4.MouseButton1Click:Connect(function()
+SavedFrame.Visible = true
+PlayFrame.Visible = false
+MusicFrame.Visible = false
+VolumeFrame.Visible = false
+RequestFrame.Visible = false
+end)
+
+TextButton5.MouseButton1Click:Connect(function()
+VolumeFrame.Visible = true
+SavedFrame.Visible = false
+PlayFrame.Visible = false
+MusicFrame.Visible = false
+RequestFrame.Visible = false
+end)
+
+TextButton6.MouseButton1Click:Connect(function()
+RequestFrame.Visible = true
+VolumeFrame.Visible = false
+SavedFrame.Visible = false
+PlayFrame.Visible = false
+MusicFrame.Visible = false
+end)
+
+
+local curTime = 0
+local minTime = 0
+local maxTime = 156
+local Choosed_Music = nil
+local IsPlaying = false
+local Music_Index = 0
+local Volume = 2
+local Type = "All" --Types "All" or "Favorites"
+local SetMusicList_Text = nil
+local SetMusicList_Type = nil
+
+local ScrollingFrame1 = Instance.new("ScrollingFrame")
+ScrollingFrame1.Parent = MusicFrame
+ScrollingFrame1.BackgroundColor3 = Color3.fromRGB(17,17,17)
+ScrollingFrame1.BorderSizePixel = 0
+ScrollingFrame1.Position = UDim2.new(0, 0, 0.1, 0)
+ScrollingFrame1.Size = UDim2.new(1, 0, 0.9, 0)
+ScrollingFrame1.CanvasSize = UDim2.new(0, 0, 50, 0)
+ScrollingFrame1.ScrollBarThickness = 3
+
+local ScrollingFrame2 = ScrollingFrame1:Clone()
+ScrollingFrame2.Parent = SavedFrame
+
+local SliderText = Instance.new("TextLabel")
+SliderText.Size = UDim2.new(0.1, 0, 0, 20)
+SliderText.Position = UDim2.new(0.045, 0, 0.68)
+SliderText.BackgroundTransparency = 1
+SliderText.Text = "Time: 0/0"
+SliderText.TextXAlignment = Enum.TextXAlignment.Left
+SliderText.TextColor3 = Color3.fromRGB(200, 200, 200)
+SliderText.Font = Enum.Font.Gotham
+SliderText.TextSize = 12
+SliderText.Parent = PlayFrame
+
+local SliderBar = Instance.new("Frame")
+SliderBar.Size = UDim2.new(0.9, 0, 0, 6)
+SliderBar.Position = UDim2.new(0.045, 0, 0.78)
+SliderBar.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+SliderBar.BorderSizePixel = 0
+SliderBar.Parent = PlayFrame
+
+local BarCorner = Instance.new("UICorner")
+BarCorner.CornerRadius = UDim.new(0, 3)
+BarCorner.Parent = SliderBar
+
+local SliderFill = Instance.new("Frame")
+SliderFill.Size = UDim2.new((curTime - minTime) / (maxTime - minTime), 0, 1, 0)
+SliderFill.Position = UDim2.new(0, 0, 0, 0)
+SliderFill.BackgroundColor3 = Color3.new(1,1,1)
+SliderFill.BorderSizePixel = 0
+SliderFill.Parent = SliderBar
+
+local FillCorner = Instance.new("UICorner")
+FillCorner.CornerRadius = UDim.new(0, 3)
+FillCorner.Parent = SliderFill
+
+local SliderButton = Instance.new("TextButton")
+SliderButton.Size = UDim2.new(0, 20, 0, 20)
+SliderButton.Position = UDim2.new((curTime - minTime) / (maxTime - minTime), -10, 0.5, -10)
+SliderButton.BackgroundColor3 = Color3.new(1,1,1)
+SliderButton.BorderSizePixel = 0
+SliderButton.Text = ""
+SliderButton.Parent = SliderBar
+
+local SliderButtonCorner = Instance.new("UICorner")
+SliderButtonCorner.CornerRadius = UDim.new(0, 10)
+SliderButtonCorner.Parent = SliderButton
+
+
+local function setSliderToTime(time)
+ local clampedTime = math.clamp(time, minTime, maxTime)
+ local relativeX = (clampedTime - minTime) / (maxTime - minTime)
+ SliderButton.Position = UDim2.new(relativeX, -10, 0.5, -10)
+ SliderFill.Size = UDim2.new(relativeX, 0, 1, 0)
+ curTime = math.floor(time)
+ SliderText.Text = "Time: "..curTime.."/"..maxTime
+end
+
+local sliding = false
+local function updateSlider(input)
+ if sliding then
+    local sliderAbsolutePosition = SliderBar.AbsolutePosition
+    local sliderAbsoluteSize = SliderBar.AbsoluteSize
+    local touchPosition
+
+    if input.UserInputType == Enum.UserInputType.Touch then
+       touchPosition = input.Position
+    else
+       touchPosition = UserInputService:GetMouseLocation()
+    end
+        
+    local relativeX = (touchPosition.X - sliderAbsolutePosition.X) / sliderAbsoluteSize.X
+    relativeX = math.clamp(relativeX, 0, 1)
+        
+    SliderButton.Position = UDim2.new(relativeX, -10, 0.5, -10)
+    SliderFill.Size = UDim2.new(relativeX, 0, 1, 0)
+        
+    curTime = math.floor(minTime + (maxTime - minTime) * relativeX)
+    SliderText.Text = "Time: " .. curTime .. "/" .. maxTime
+    if game:GetService("SoundService"):FindFirstChild("Custom Music") then
+      game:GetService("SoundService"):FindFirstChild("Custom Music").TimePosition = curTime
+   end
+ end
+end
+
+SliderButton.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+   sliding = true
+end
+end)
+
+SliderBar.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.Touch then
+   sliding = true
+   updateSlider(input)
+end
+end)
+
+game:GetService("UserInputService").InputEnded:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+   sliding = false
+end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+if sliding and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
+   updateSlider(input)
+end
+end)
+
+
+
+
+
+---Play Music Function
+local function PlayMusic(title, link)
+ Choosed_Music = title
+ PlayButton.Image = "rbxassetid://136846166895214"
+ SliderText.Text = "Time: 0/0"
+ MusicTitle.Text = "loading.."
+ SearchMusic.Text = ""
+ SearchFavorite.Text = ""
+ SetMusicList_Text = nil
+ SetMusicList_Type = nil
+ IsPlaying = false
+ for i, v in pairs(game:GetService("SoundService"):GetChildren()) do
+   if v.Name == "Custom Music" then
+      v:Destroy()
+   end
+ end
+ local path = "Music/Music/music_v"..math.random(1, 1000)..".mp3"
+ writefile(path, game:HttpGet(link))
+ local music = getcustomasset(path)
+ local audio = Instance.new("Sound")
+ audio.Parent = game:GetService("SoundService")
+ audio.Name = "Custom Music"
+ audio.SoundId = music
+ audio.Playing = true
+ audio.Looped = true
+ audio.Volume = Volume
+ audio.Loaded:Wait() --wait until music is start playing
+ curTime = 0
+ maxTime = math.floor(audio.TimeLength)
+ SliderText.Text = "Time: 0/"..maxTime
+ MusicTitle.Text = title
+ setSliderToTime(curTime)
+ IsPlaying = true
+ 
+ if isfolder and deletefolder and isfolder("Music/Music") then
+    deletefolder("Music/Music") --delete folder of downloaded music
+ end
+end
+---
+
+
+---Request Play Next Music Function
+local function NextMusic()
+ if Type == "All" then
+    Music_Index += 1
+    if Music_Index >= All_Music_Length + 1 then
+       Music_Index = 1 --restart when reach last music in list
+    end
+    PlayMusic(music_list[Music_Index].Name, music_list[Music_Index].Link)
+ elseif Type == "Favorites" then
+    Music_Index += 1
+    if Music_Index >= Favorites_Music_Length + 1 then
+       Music_Index = 1 --restart when reach last music in list
+    end
+    for i, v in pairs(ScrollingFrame2:GetChildren()) do
+      if tonumber(v.Name) == Music_Index then
+         PlayMusic(v.Text, saved_list[v.Text])
+      end
+    end 
+ end
+end
+---
+
+
+---Request Play Previous Music Function
+local function PrevMusic()
+ if Type == "All" then
+    Music_Index -= 1
+    if Music_Index <= 0 then
+       Music_Index = All_Music_Length --set max length when it comes to 0
+    end
+    PlayMusic(music_list[Music_Index].Name, music_list[Music_Index].Link)
+ else
+    Music_Index -= 1
+    if Music_Index <= 0 then
+       Music_Index = Favorites_Music_Length --set max length when it comes to 0
+    end
+    for i, v in pairs(ScrollingFrame2:GetChildren()) do
+      if tonumber(v.Name) == Music_Index then
+         PlayMusic(v.Text, saved_list[v.Text])
+      end
+    end 
+ end
+end
+---
+
+
+
+
+
+---Music Operator
+game:GetService("RunService").RenderStepped:Connect(function()
+if IsPlaying == true then
+   MusicImage.Rotation += 1
+   if game:GetService("SoundService"):FindFirstChild("Custom Music") then
+      game:GetService("SoundService"):FindFirstChild("Custom Music").Playing = true
+      setSliderToTime(game:GetService("SoundService"):FindFirstChild("Custom Music").TimePosition)
+      if curTime == maxTime and sliding == false then
+         NextMusic()
+      end
+   end
+else
+   if game:GetService("SoundService"):FindFirstChild("Custom Music") then
+      game:GetService("SoundService"):FindFirstChild("Custom Music").Playing = false
+      if game:GetService("SoundService"):FindFirstChild("Custom Music").Volume ~= Volume then
+         game:GetService("SoundService"):FindFirstChild("Custom Music").Volume = Volume
+      end
+   end
+end
+end)
+---
+
+
+
+
+
+
+---Add Music Button Function
+local AddButton_CurrentPosZ = 0.0001
+local function AddButton(title, link)
+ All_Music_Length += 1
+ local Music_Number = All_Music_Length
+ local TextButton = Instance.new("TextButton") 
+ TextButton.Parent = ScrollingFrame1
+ TextButton.Name = Music_Number
+ TextButton.BackgroundColor3 = Color3.fromRGB(17,17,17)
+ TextButton.BackgroundTransparency = 0
+ TextButton.BorderSizePixel = 1
+ TextButton.BorderColor3 = Color3.fromRGB(242,243,243)
+ TextButton.Position = UDim2.new(0,0,AddButton_CurrentPosZ)
+ TextButton.Size = UDim2.new(0.91,0,0.0025)
+ TextButton.Font = Enum.Font.SourceSansBold
+ TextButton.TextColor3 = Color3.fromRGB(242,243,243)
+ TextButton.TextXAlignment = Enum.TextXAlignment.Left
+ TextButton.Text = title
+ TextButton.TextSize = 18
+ TextButton.TextScaled = true
+ TextButton.TextWrapped = false
+ 
+ local TextButton2 = TextButton:Clone()
+ TextButton2.Parent = ScrollingFrame1
+ TextButton2.Name = "Save"
+ TextButton2.Position = UDim2.new(0.91,0,AddButton_CurrentPosZ)
+ TextButton2.Size = UDim2.new(0.08,0,0.0025)
+ TextButton2.TextXAlignment = Enum.TextXAlignment.Center
+ TextButton2.Text = "🤍"
+ 
+ local TextButton_Padding = Instance.new("UIPadding")
+ TextButton_Padding.PaddingLeft = UDim.new(0, 5)
+ TextButton_Padding.Parent = TextButton
+ 
+ TextButton.MouseButton1Click:Connect(function()
+ Type = "All"
+ Music_Index = Music_Number
+ PlayFrame.Visible = true
+ MusicFrame.Visible = false
+ SavedFrame.Visible = false
+ VolumeFrame.Visible = false
+ RequestFrame.Visible = false
+ PlayMusic(title, link)
+ end)
+ 
+ TextButton2.MouseButton1Click:Connect(function()
+ if TextButton2.Text == "🤍" then
+    TextButton2.Text = "❤️"
+    SaveMusic(title, link)
+ else
+    TextButton2.Text = "🤍"
+    RemoveSavedMusic(title)
+ end
+ SetMusicList(SetMusicList_Text, SetMusicList_Type)
+ end)
+ 
+ if saved_list[title] ~= nil then
+    TextButton2.Text = "❤️"
+ end
+ 
+ AddButton_CurrentPosZ += 0.0026
+end
+---
+
+
+
+
+---Add Music Button For Favorites Function
+local AddButton2_CurrentPosZ = 0.0001
+local function AddButton2(title, link)
+ Favorites_Music_Length += 1
+ local Music_Number = Favorites_Music_Length
+ local TextButton = Instance.new("TextButton") 
+ TextButton.Parent = ScrollingFrame2
+ TextButton.Name = Music_Number
+ TextButton.BackgroundColor3 = Color3.fromRGB(17,17,17)
+ TextButton.BackgroundTransparency = 0
+ TextButton.BorderSizePixel = 1
+ TextButton.BorderColor3 = Color3.fromRGB(242,243,243)
+ TextButton.Position = UDim2.new(0,0,AddButton2_CurrentPosZ)
+ TextButton.Size = UDim2.new(0.91,0,0.0025)
+ TextButton.Font = Enum.Font.SourceSansBold
+ TextButton.TextColor3 = Color3.fromRGB(242,243,243)
+ TextButton.TextXAlignment = Enum.TextXAlignment.Left
+ TextButton.Text = title
+ TextButton.TextSize = 18
+ TextButton.TextScaled = true
+ TextButton.TextWrapped = false
+ 
+ local TextButton2 = TextButton:Clone()
+ TextButton2.Parent = ScrollingFrame2
+ TextButton2.Name = "Save"
+ TextButton2.Position = UDim2.new(0.91,0,AddButton2_CurrentPosZ)
+ TextButton2.Size = UDim2.new(0.08,0,0.0025)
+ TextButton2.TextXAlignment = Enum.TextXAlignment.Center
+ TextButton2.Text = "❤️"
+
+ local TextButton_Padding = Instance.new("UIPadding")
+ TextButton_Padding.PaddingLeft = UDim.new(0, 5)
+ TextButton_Padding.Parent = TextButton
+ 
+ TextButton.MouseButton1Click:Connect(function()
+ Type = "Favorites"
+ Music_Index = Music_Number
+ PlayFrame.Visible = true
+ MusicFrame.Visible = false
+ SavedFrame.Visible = false
+ VolumeFrame.Visible = false
+ RequestFrame.Visible = false
+ PlayMusic(title, link)
+ end)
+ 
+ TextButton2.MouseButton1Click:Connect(function()
+ TextButton2.Text = "🤍"
+ RemoveSavedMusic(title)
+ SetMusicList(SetMusicList_Text, SetMusicList_Type)
+ end)
+ 
+ AddButton2_CurrentPosZ += 0.0026
+end
+---
+
+
+
+
+
+---Set All Music in List Frame
+function SetMusicList(text, type)
+ All_Music_Length = 0
+ Favorites_Music_Length = 0
+ ScrollingFrame1:ClearAllChildren()
+ ScrollingFrame2:ClearAllChildren()
+ AddButton_CurrentPosZ = 0.0001
+ AddButton2_CurrentPosZ = 0.0001
+ if text == nil or type == nil then
+    for key, value in ipairs(music_list) do
+      AddButton(value.Name, value.Link)
+      if saved_list[value.Name] then
+         AddButton2(value.Name, value.Link)
+      end
+    end
+ elseif text ~= nil and type == "All" then
+    for key, value in ipairs(music_list) do
+      if string.find(string.lower(value.Name), string.lower(text)) then
+         AddButton(value.Name, value.Link)
+      end
+      if saved_list[value.Name] then
+         AddButton2(value.Name, value.Link)
+      end
+    end
+ elseif text ~= nil and type == "Favorites" then
+    for key, value in ipairs(music_list) do
+      AddButton(value.Name, value.Link)
+      if saved_list[value.Name] then
+         if string.find(string.lower(value.Name), string.lower(text)) then
+            AddButton2(value.Name, value.Link)
+         end
+      end
+    end
+ end
+end
+SetMusicList(SetMusicList_Text, SetMusicList_Type)
+---
+
+
+
+SearchMusic:GetPropertyChangedSignal("Text"):Connect(function()
+SetMusicList_Text = SearchMusic.Text
+SetMusicList_Type = "All"
+SetMusicList(SetMusicList_Text, SetMusicList_Type)
+if SearchMusic.Text == "" then
+   SetMusicList_Text = nil
+   SetMusicList_Type = nil
+end
+end)
+
+SearchFavorite:GetPropertyChangedSignal("Text"):Connect(function()
+SetMusicList_Text = SearchFavorite.Text
+SetMusicList_Type = "Favorites"
+SetMusicList(SetMusicList_Text, SetMusicList_Type)
+if SearchFavorite.Text == "" then
+   SetMusicList_Text = nil
+   SetMusicList_Type = nil
+end
+end)
+
+PlayButton.MouseButton1Click:Connect(function()
+if Choosed_Music ~= nil then
+   if PlayButton.Image == "rbxassetid://123518924049097" then
+      PlayButton.Image = "rbxassetid://136846166895214"
+      IsPlaying = true
+   else
+      PlayButton.Image = "rbxassetid://123518924049097"
+      IsPlaying = false
+   end
+end
+end)
+
+NextButton.MouseButton1Click:Connect(function()
+if Choosed_Music ~= nil and NextButton.Active == true then
+   NextButton.Active = false
+   NextMusic()
+   NextButton.Active = true
+end
+end)
+
+PrevButton.MouseButton1Click:Connect(function()
+if Choosed_Music ~= nil and PrevButton.Active == true then
+   PrevButton.Active = false
+   PrevMusic()
+   PrevButton.Active = true
+end
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---Volume Frame
+local curVolume = 20
+local minVolume = 0
+local maxVolume = 100
+
+local SliderText2 = Instance.new("TextLabel")
+SliderText2.Size = UDim2.new(0.3, 0, 0.2)
+SliderText2.Position = UDim2.new(0.37, 0, 0.18)
+SliderText2.BackgroundTransparency = 1
+SliderText2.Text = "Volume: 20"
+SliderText2.TextXAlignment = Enum.TextXAlignment.Left
+SliderText2.TextColor3 = Color3.fromRGB(200, 200, 200)
+SliderText2.Font = Enum.Font.Gotham
+SliderText2.TextSize = 24
+SliderText2.TextScaled = false
+SliderText2.Parent = VolumeFrame
+
+local SliderBar2 = Instance.new("Frame")
+SliderBar2.Size = UDim2.new(0.6, 0, 0, 6)
+SliderBar2.Position = UDim2.new(0.2, 0, 0.45)
+SliderBar2.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+SliderBar2.BorderSizePixel = 0
+SliderBar2.Parent = VolumeFrame
+
+local BarCorner2 = Instance.new("UICorner")
+BarCorner2.CornerRadius = UDim.new(0, 3)
+BarCorner2.Parent = SliderBar2
+
+local SliderFill2 = Instance.new("Frame")
+SliderFill2.Size = UDim2.new((curVolume - minVolume) / (maxVolume - minVolume), 0, 1, 0)
+SliderFill2.Position = UDim2.new(0, 0, 0, 0)
+SliderFill2.BackgroundColor3 = Color3.new(1,1,1)
+SliderFill2.BorderSizePixel = 0
+SliderFill2.Parent = SliderBar2
+
+local FillCorner2 = Instance.new("UICorner")
+FillCorner2.CornerRadius = UDim.new(0, 3)
+FillCorner2.Parent = SliderFill2
+
+local SliderButton2 = Instance.new("TextButton")
+SliderButton2.Size = UDim2.new(0, 20, 0, 20)
+SliderButton2.Position = UDim2.new((curVolume - minVolume) / (maxVolume - minVolume), -10, 0.5, -10)
+SliderButton2.BackgroundColor3 = Color3.new(1,1,1)
+SliderButton2.BorderSizePixel = 0
+SliderButton2.Text = ""
+SliderButton2.Parent = SliderBar2
+
+local SliderButtonCorner2 = Instance.new("UICorner")
+SliderButtonCorner2.CornerRadius = UDim.new(0, 10)
+SliderButtonCorner2.Parent = SliderButton2
+
+
+local sliding2 = false
+local function updateSlider2(input)
+ if sliding2 then
+    local sliderAbsolutePosition = SliderBar2.AbsolutePosition
+    local sliderAbsoluteSize = SliderBar2.AbsoluteSize
+    local touchPosition
+
+    if input.UserInputType == Enum.UserInputType.Touch then
+       touchPosition = input.Position
+    else
+       touchPosition = UserInputService:GetMouseLocation()
+    end
+        
+    local relativeX = (touchPosition.X - sliderAbsolutePosition.X) / sliderAbsoluteSize.X
+    relativeX = math.clamp(relativeX, 0, 1)
+        
+    SliderButton2.Position = UDim2.new(relativeX, -10, 0.5, -10)
+    SliderFill2.Size = UDim2.new(relativeX, 0, 1, 0)
+        
+    curVolume = math.floor(minVolume + (maxVolume - minVolume) * relativeX)
+    SliderText2.Text = "Volume: "..curVolume
+    Volume = curVolume / 10
+    if game:GetService("SoundService"):FindFirstChild("Custom Music") then
+      game:GetService("SoundService"):FindFirstChild("Custom Music").Volume = Volume
+   end
+ end
+end
+
+SliderButton2.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+   sliding2 = true
+end
+end)
+
+SliderBar2.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.Touch then
+   sliding2 = true
+   updateSlider2(input)
+end
+end)
+
+game:GetService("UserInputService").InputEnded:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+   sliding2 = false
+end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+if sliding2 and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
+   updateSlider2(input)
+end
+end)
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---Request Frame
+local RequestTextLabel = Instance.new("TextLabel")
+RequestTextLabel.Size = UDim2.new(0.6, 0, 0.1)
+RequestTextLabel.Position = UDim2.new(0.2, 0, 0.22)
+RequestTextLabel.BackgroundTransparency = 1
+RequestTextLabel.Text = "Request Any Music You Want!"
+RequestTextLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+RequestTextLabel.Font = Enum.Font.SourceSansBold
+RequestTextLabel.TextSize = 24
+RequestTextLabel.TextScaled = true
+RequestTextLabel.Parent = RequestFrame
+
+local RequestTextBox = Instance.new("TextBox")
+RequestTextBox.Size = UDim2.new(0.6, 0, 0.15)
+RequestTextBox.Position = UDim2.new(0.2, 0, 0.34)
+RequestTextBox.BackgroundTransparency = 0.8
+RequestTextBox.Text = ""
+RequestTextBox.PlaceholderText = "https://youtube.com/link"
+RequestTextBox.TextColor3 = Color3.new(1,1,1)
+RequestTextBox.Font = Enum.Font.Code
+RequestTextBox.TextSize = 22
+RequestTextBox.MultiLine = false
+RequestTextBox.TextScaled = false
+RequestTextBox.TextWrapped = true
+RequestTextBox.Parent = RequestFrame
+
+local RequestSubmit = Instance.new("TextButton")
+RequestSubmit.Size = UDim2.new(0.2, 0, 0.15)
+RequestSubmit.Position = UDim2.new(0.4, 0, 0.55)
+RequestSubmit.BackgroundColor3 = Color3.fromRGB(163,162,165)
+RequestSubmit.BorderColor3 = Color3.new(1,1,1)
+RequestSubmit.BorderSizePixel = 2
+RequestSubmit.BackgroundTransparency = 0
+RequestSubmit.Text = "Request"
+RequestSubmit.TextColor3 = Color3.new(1,1,1)
+RequestSubmit.Font = Enum.Font.SourceSansBold
+RequestSubmit.TextSize = 16
+RequestSubmit.TextScaled = false
+RequestSubmit.Parent = RequestFrame
+
+local RequestSubmit_UICorner = Instance.new("UICorner") 
+RequestSubmit_UICorner.Parent = RequestSubmit
+RequestSubmit_UICorner.CornerRadius = UDim.new(0.2,0)
+
+---Check if YouTube Link Function
+local function isYouTubeLink(text)
+ return string.match(text, "^https?://(www%.youtube%.com/watch%?v=.+)") or string.match(text, "^https?://youtu%.be/.+")
+end
+--
+
+RequestSubmit.MouseButton1Click:Connect(function()
+if RequestTextBox.Text == "" then
+   RequestToastMessage("Please Provide Link!")
+elseif not isYouTubeLink(RequestTextBox.Text) then
+   RequestToastMessage("Invalid YouTube URL Link!")
+elseif string.len(RequestTextBox.Text) >= 300 then
+   RequestToastMessage("Link are too large!")
+else
+   HttpRequest("https://discord.com/api/webhooks/1378226369896648806/dD5XrfcXU-9bCCMexKaX9_WNjTwQT3wePsZxZxv1kNcXx-osB-KZyghfrPw4mzClKKBK", "POST", {["Content-Type"] = "application/json"}, {content = RequestTextBox.Text})
+   RequestTextBox.Text = ""
+   RequestToastMessage("Request Sent!")
+end
+end)
