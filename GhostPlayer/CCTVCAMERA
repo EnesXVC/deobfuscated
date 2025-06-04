@@ -410,6 +410,6 @@ getgenv().Handle = true
 while getgenv().Handle == true do
 workspace:FindFirstChild("CCTV").CFrame = game.Players.LocalPlayer.Character.LeftHand.CFrame
 workspace:FindFirstChild("CCTV").Camera.CFrame = game.Players.LocalPlayer.Character.LeftHand.CFrame
-print()
+--print()
 game:GetService("RunService").Heartbeat:wait();
 end;
