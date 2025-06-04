@@ -2,7 +2,7 @@
 local CoreGui = game:GetService("StarterGui")
 
 CoreGui:SetCore("SendNotification", {
-    Title = "Script Cracked Made By",
+    Title = "Script Cracked By",
     Text = "IEnes",
     Icon = "rbxassetid://29819383",
     Duration = 2.5,
